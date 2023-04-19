@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookstore - Checkout</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-5">
+        <h1>Checkout</h1>
+        <p>Review and confirm your order</p>
+    </header>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="allbooks.html">All Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bookdetails.html">Book Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="findus.html">Find Us</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container mt-4">
+        <h2>Order Summary</h2>
+        <div id="cartItems">
+            
+        </div>
+        <div id="empty">
+
+        </div>
+        <a href="#" class="btn btn-primary mt-3">Checkout</a>
+        <a href="#" onclick="emptyCart()" class="btn btn-danger mt-3">Empty Cart</a>
+    </div>
+    <script>
+        var cartItems = localStorage.getItem('cartItems');
+        if (cartItems === null || cartItems === '') {
+                alert("Cart Empty");
+                location.href = 'allbooks.html';
+        } else {
+            cartItems = JSON.parse(cartItems);
+
+                cartItems.forEach(cartItem => {
+            
+                var row = document.createElement('div');
+                row.className = 'row mt-3';
+
+                var imageCol = document.createElement('div');
+                imageCol.className = 'col-md-3';
+                var author_picture = document.createElement('img');
+                author_picture.src = cartItem.author_picture;
+                author_picture.className = 'img-fluid';
+                imageCol.appendChild(author_picture);
+                row.appendChild(imageCol);
+
+                var detailsCol = document.createElement('div');
+                detailsCol.className = 'col-md-6';
+                
+                var title = document.createElement('h5');
+                title.textContent = cartItem.title;
+                var author = document.createElement('p');
+                author.textContent = 'Author: ' + cartItem.author;
+                
+                detailsCol.appendChild(title);
+                detailsCol.appendChild(author);
+                row.appendChild(detailsCol);
+
+                var removeCol = document.createElement('div');
+                removeCol.className = 'col-md-3 text-right';
+                
+                var removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-danger';
+                removeBtn.textContent = 'Remove';
+                removeBtn.addEventListener('click', function(e) {
+                    var index = Array.from(e.target.parentNode.parentNode.parentNode.children).indexOf(e.target.parentNode.parentNode);
+                    cartItems.splice(index, 1);
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                    location.reload(); 
+                });
+
+                removeCol.appendChild(removeBtn);
+                row.appendChild(removeCol);
+                document.getElementById('cartItems').appendChild(row);
+        });
+
+
+        function emptyCart() {
+            let choice = confirm("Are you sure you want to empty cart?");
+            if (!choice) return;
+            localStorage.setItem('cartItems', []);
+            location.reload(); 
+        }
+}
+</script>
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookstore - Find Us</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+</head>
+<body>
+    <header class="bg-dark text-white text-center py-5">
+        <h1>Find Us</h1>
+        <p>Get driving directions to our bookstore</p>
+    </header>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="allbooks.html">All Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bookdetails.html">Book Details</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="checkout.html">Checkout</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container mt-4 mb-5">
+        <h2>Our Location</h2>
+        <div id="map" style="height: 500px;"></div>
+    </div>
+    <script>
+        // Initialize Google Maps
+        function initMap() {
+
+        var bookstoreLocation = {lat: 37.7749, lng: -122.4194}; // 
+
+        // Create map object
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: bookstoreLocation
+        });
+
+        // Add marker for bookstore location
+        var marker = new google.maps.Marker({
+            position: bookstoreLocation,
+            map: map,
+            title: 'Bookstore Location'
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script>

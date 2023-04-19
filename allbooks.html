@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bookstore - All Books</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style>
+        .card {
+            display: relative;
+            overflow : hidden;
+            opacity: 0.9;
+        }
+        img {
+            display: absolute;
+            transition: transform 0.3s ease-in-out; 
+        }
+
+        img:hover {
+            transform: scale(1.1); /* Scale the image to 110% on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-dark text-white text-center py-5">
+        <h1>All Books</h1>
+        <p>Explore our collection of books</p>
+    </header>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="allbooks.html">All Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="findus.html">Find Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="checkout.html">Checkout</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container mt-4">
+        <h2 class="text-center">Our Collection of Books</h2>
+        <div class="row mt-4" id="book-row">
+            
+        </div>
+    </div>
+</body>
+
+<script>
+    $(document).ready(function(){
+        localStorage.clear;
+        addBooks();
+        displayBooks();
+    });
+
+const books = [
+    {
+        'id' : 1,
+        'title' : "The gods must be crazy",
+        'author' : 'Isaac Jones',
+        'description' : 'Very funny book about how life is complicated and sad.',
+        'author_picture' : 'https://randomuser.me/api/portraits/women/1.jpg'
+    },
+    {
+        'id' : 2,
+        'title' : "The Art of Napping: Mastering the Fine Art of Sleeping Anywhere, Anytime",
+        'author' : 'Snoozy McSleeperson',
+        'description' : 'Learn the secrets of the perfect nap, from choosing the right spot to mastering the art of dozing off in public.',
+        'author_picture' : 'https://randomuser.me/api/portraits/men/0.jpg'
+    },
+    {
+        'id' : 3,
+        'title' : "Purrfectly Peculiar: Tales of Extraordinary Cats with Unbelievable Antics",
+        'author' : 'Whiskers McGee',
+        'description' : 'Dive into the world of wacky felines with stories of their unbelievable antics and peculiar behavior.',
+        'author_picture' : 'https://randomuser.me/api/portraits/women/0.jpg'
+    },
+    {
+        'id' : 4,
+        'title' : "Laughing Your Way to Six-Pack Abs: Hilarious Workout Routines for a Fit and Fun Body",
+        'author' : 'Chuckle McMuscles',
+        'description' : 'Get fit and have a laugh with this humorous guide to workout routines that will make you laugh your way to six-pack abs.',
+        'author_picture' : 'https://randomuser.me/api/portraits/women/2.jpg'
+    },
+    {
+        'id' : 5,
+        'title' : "Cooking with Chaos: Recipes for Disastrous Dishes and Hilarious Kitchen Catastrophes",
+        'author' : 'Messy Muncher',
+        'description' : 'Embark on a culinary adventure with disastrous recipes and hilarious kitchen mishaps that will leave you in stitches.',
+        'author_picture' : 'https://randomuser.me/api/portraits/men/16.jpg'
+    }
+];
+
+    function setBookUser(id) {
+        localStorage.setItem('currentBook', id);
+    }
+
+    function addBooks() {
+        if (!localStorage.getItem('books')) {
+                localStorage.setItem('books', '[]');
+        }
+        
+        const booksSaved = JSON.parse(localStorage.getItem('books'));
+
+        books.forEach(book => booksSaved.push(book));
+
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    function displayBooks() {
+
+        const booksrow = document.querySelector('#book-row');
+        const books = JSON.parse(localStorage.getItem('books'));
+
+        books.forEach(book => {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-4';
+
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+
+            const img = document.createElement('img');
+            img.src = book.author_picture; 
+            img.className = 'card-img-top'; 
+            img.alt = book.title.slice(0,3);
+            img.height = 200;
+
+            const cardBodyDiv = document.createElement('div');
+            cardBodyDiv.className = 'card-body';
+
+            const title = document.createElement('h5');
+            title.className = 'card-title';
+            title.textContent = book.title.slice(0,60) + '...';
+
+            const author = document.createElement('p');
+            author.className = 'card-text';
+            author.className = 'strong';
+            author.textContent = 'by ' + book.author; 
+
+            const description = document.createElement('p');
+            description.className = 'card-text';
+            description.textContent = book.description.slice(0,60) + '...';; 
+
+            const viewDetailsLink = document.createElement('a');
+
+            viewDetailsLink.addEventListener('click', function() {
+                setBookUser(book.id);
+                console.log('Button clicked!');
+            });
+            viewDetailsLink.href = 'bookdetails.html';
+            viewDetailsLink.className = 'btn btn-primary';
+            viewDetailsLink.textContent = 'View Details'; 
+        
+            const addCartLink = document.createElement('a');
+            addCartLink.addEventListener('click', function() {
+                setBookUser(book.id);
+                console.log('Button clicked!');
+            });
+            addCartLink.href = 'bookdetails.html';
+            addCartLink.className = 'btn btn-secondary';
+            addCartLink.textContent = 'Add to Cart Details'; 
+            cardDiv.appendChild(img);
+
+            cardBodyDiv.appendChild(title);
+            cardBodyDiv.appendChild(author);
+            cardBodyDiv.appendChild(description);
+            cardBodyDiv.appendChild(viewDetailsLink);
+
+            cardDiv.appendChild(cardBodyDiv);
+            colDiv.appendChild(cardDiv);
+            booksrow.appendChild(colDiv);
+        });
+    }
+</script>
+
+</html>
+

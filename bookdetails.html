@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bookstore - Book Details</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header class="bg-dark text-white text-center py-5">
+        <h1>Book Details</h1>
+        <p>Complete details of the book</p>
+    </header>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="allbooks.html">All Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="findus.html">Find Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="checkout.html">Checkout</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container mt-4">
+        <div id="detail-box" style="box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset">
+        </div>
+        <a href="allbooks.html" class="btn btn-primary mb-5 ml-5">Back to All Books</a>
+        <a href="" class="btn btn-primary ml-2 mb-5" onclick="addToCart()">Add to Cart</a>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            showBook();
+        });
+
+        function showBook() {
+
+            let books = JSON.parse(localStorage.getItem('books'));
+
+            currentBook = localStorage.getItem('currentBook');
+
+            let book;
+            
+            books.forEach(bookCheck => {
+                
+                if (bookCheck.id == currentBook) {
+                    book = bookCheck;
+                    console.log(book);
+                }
+            });
+
+            let container = document.querySelector('#detail-box');
+
+            const img = document.createElement('img');
+            img.src = book.author_picture;
+            img.className = "p-5";
+
+            const title = document.createElement('h2');
+            title.textContent = book.title;
+            title.className = "pl-5";
+
+            const author = document.createElement('p');
+            author.textContent = 'Author: ' + book.author;
+            author.className = "pl-5";
+
+            const desc = document.createElement('p');
+            desc.textContent = '  Description: ' + book.description;
+            desc.className = "pl-5 pb-5";
+
+            container.appendChild(img);
+            container.appendChild(title);
+            container.appendChild(author);
+            container.appendChild(desc);
+        }
+
+        function addToCart() {
+            event.preventDefault();
+            let books = JSON.parse(localStorage.getItem('books'));
+            currentBook = localStorage.getItem('currentBook');
+
+            let book;
+            
+            books.forEach(bookCheck => {   
+                if (bookCheck.id == currentBook) {
+                    book = bookCheck;
+                    console.log(book);
+                }
+            });
+
+            if (!localStorage.getItem('cartItems')) {
+                localStorage.setItem('cartItems', '[]');
+            }
+
+            var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+            const foundObject = cartItems.find(obj => obj.title === book.title &&
+                                        obj.author === book.author &&
+                                        obj.description === book.description);
+
+            if (foundObject) {
+                alert("Book was already added to cart!");
+            } else {
+                cartItems.push(book);
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                alert("Book added to cart!");
+            }
+            location.href = 'allbooks.html';
+            return false;
+        }
+
+    </script>
+</body>
+
+</html>
